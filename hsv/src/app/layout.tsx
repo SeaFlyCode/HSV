@@ -8,11 +8,11 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr">
+    <html lang="fr" className="h-screen">
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet"/>
       </head>
-      <body>
+      <body className="h-screen flex flex-col">
         <Navbar/>
         {children}
       </body>

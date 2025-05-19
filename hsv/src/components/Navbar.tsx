@@ -11,7 +11,7 @@ export default function Navbar(){
                 <li><Link href="/about" 
                 className="text-black font-bold text-xs not-italic leading-normal font-ubuntu"
                 >Où sommes nous ?</Link></li>
-                <li><Link href="/contact" 
+                <li><Link href="/prendre-rendez-vous" 
                 className="bg-[#4977FF] text-white font-bold text-xs not-italic leading-normal font-ubuntu rounded-[25px] px-4 py-2 transition hover:bg-blue-700"
                 >Prendre Rendez-Vous</Link></li>
             </ul>
