@@ -13,7 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet"/>
         <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
       </head>
-      <body className="h-screen flex flex-col">
+      <body className="bg-gradient-hsv h-screen flex flex-col">
         <Navbar/>
         {children}
       </body>
