@@ -8,7 +8,7 @@ export default function Navbar(){
                 <li><Link href="/" 
                 className="text-black font-bold text-xs not-italic leading-normal font-ubuntu"
                 >Qui somme nous ?</Link></li>
-                <li><Link href="/about" 
+                <li><Link href="/ou-somme-nous" 
                 className="text-black font-bold text-xs not-italic leading-normal font-ubuntu"
                 >Où sommes nous ?</Link></li>
                 <li><Link href="/prendre-rendez-vous" 
