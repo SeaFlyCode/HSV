@@ -16,14 +16,23 @@ export const handleGetAllReservations = (req: Request, res: Response) => {
 
 // Ajouter une nouvelle réservation
 export const handlecreateReservation = (req: Request, res: Response) => {
-    const { date, place, nameDoctor, speciality, status } = req.body;
+    console.log('Données reçues:', req.body);
+    const { nom, prenom, email, telephone, specialite, date } = req.body;
+      // Création d'une réservation avec les champs du formulaire
     const newReservation = {
         id: Date.now().toString(), // Génère un id unique basé sur le timestamp
         date,
-        place,
-        nameDoctor,
-        speciality,
-        status
+        place: 'La Pitié Salpêtrière', // Valeur par défaut
+        nameDoctor: 'À assigner', // Valeur par défaut
+        speciality: specialite, // Utilise la spécialité du formulaire
+        status: 'En attente', // Par défaut, la réservation est en attente
+        // Ajout des informations du patient
+        patient: {
+            nom,
+            prenom,
+            email,
+            telephone
+        }
     };
 
     createReservation(newReservation)

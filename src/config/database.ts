@@ -41,7 +41,8 @@ export async function connectToDatabase () {
         place: reservation.place,
         nameDoctor: reservation.nameDoctor,
         speciality: reservation.speciality,
-        status: reservation.status
+        status: reservation.status,
+        patient: reservation.patient // Ajout des informations du patient
     }));
     }
 
