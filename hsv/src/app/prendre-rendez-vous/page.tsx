@@ -11,23 +11,74 @@ const NouvellePage = () => {
     specialite: '',
     date: '',
   });
+  
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Effacer l'erreur pour ce champ s'il est rempli
+    if (value.trim() !== '') {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    let isValid = true;
+    
+    // Vérifier que tous les champs sont remplis
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value.trim() === '') {
+        newErrors[key] = 'Ce champ est obligatoire';
+        isValid = false;
+      }
+    });
+    
+    // Vérification de format d'email
+    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Format d\'email invalide';
+      isValid = false;
+    }
+    
+    // Vérification du numéro de téléphone
+    if (formData.telephone && !/^[0-9]{10}$/.test(formData.telephone)) {
+      newErrors.telephone = 'Le numéro doit contenir 10 chiffres';
+      isValid = false;
+    }
+    
+    setErrors(newErrors);
+    return isValid;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      alert('Veuillez remplir tous les champs obligatoires correctement');
+      return;
+    }
+    
     try {
-      const res = await fetch('/api/rendezvous', {
+      console.log('Envoi des données:', formData); // Pour débugger
+      const res = await fetch('http://localhost:3000/api/resa', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
       if (res.ok) {
         alert('Formulaire envoyé avec succès !');
+        setFormData({
+          nom: '',
+          prenom: '',
+          email: '',
+          telephone: '',
+          specialite: '',
+          date: '',
+        });
       } else {
-        alert('Erreur lors de l’envoi');
+        alert('Erreur lors de l\'envoi: ' + (await res.text()));
       }
     } catch (err) {
       console.error(err);
@@ -49,7 +100,7 @@ const NouvellePage = () => {
           {/* NOM */}
           <div className="w-full flex flex-col gap-1">
             <label htmlFor="nom" className="text-black text-xl font-medium font-['Work_Sans']">
-              NOM
+              NOM <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -57,14 +108,16 @@ const NouvellePage = () => {
               id="nom"
               value={formData.nom}
               onChange={handleChange}
-              className="h-10 px-3 bg-neutral-200 rounded-[5px] border border-black/30 outline-none"
+              className={`h-10 px-3 bg-neutral-200 rounded-[5px] border ${errors.nom ? 'border-red-500' : 'border-black/30'} outline-none`}
+              required
             />
+            {errors.nom && <p className="text-red-500 text-sm mt-1">{errors.nom}</p>}
           </div>
 
           {/* PRÉNOM */}
           <div className="w-full flex flex-col gap-1">
             <label htmlFor="prenom" className="text-black text-xl font-medium font-['Work_Sans']">
-              PRÉNOM
+              PRÉNOM <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -72,14 +125,16 @@ const NouvellePage = () => {
               id="prenom"
               value={formData.prenom}
               onChange={handleChange}
-              className="h-10 px-3 bg-neutral-200 rounded-[5px] border border-black/30 outline-none"
+              className={`h-10 px-3 bg-neutral-200 rounded-[5px] border ${errors.prenom ? 'border-red-500' : 'border-black/30'} outline-none`}
+              required
             />
+            {errors.prenom && <p className="text-red-500 text-sm mt-1">{errors.prenom}</p>}
           </div>
 
           {/* EMAIL */}
           <div className="w-full flex flex-col gap-1">
             <label htmlFor="email" className="text-black text-xl font-medium font-['Work_Sans']">
-              EMAIL
+              EMAIL <span className="text-red-500">*</span>
             </label>
             <input
               type="email"
@@ -87,14 +142,16 @@ const NouvellePage = () => {
               id="email"
               value={formData.email}
               onChange={handleChange}
-              className="h-10 px-3 bg-neutral-200 rounded-[5px] border border-black/30 outline-none"
+              className={`h-10 px-3 bg-neutral-200 rounded-[5px] border ${errors.email ? 'border-red-500' : 'border-black/30'} outline-none`}
+              required
             />
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
           </div>
 
           {/* NUMÉRO TÉLÉPHONE */}
           <div className="w-full flex flex-col gap-1">
             <label htmlFor="telephone" className="text-black text-xl font-medium font-['Work_Sans']">
-              NUMÉRO TÉLÉPHONE
+              NUMÉRO TÉLÉPHONE <span className="text-red-500">*</span>
             </label>
             <input
               type="tel"
@@ -102,14 +159,17 @@ const NouvellePage = () => {
               id="telephone"
               value={formData.telephone}
               onChange={handleChange}
-              className="h-10 px-3 bg-neutral-200 rounded-[5px] border border-black/30 outline-none"
+              className={`h-10 px-3 bg-neutral-200 rounded-[5px] border ${errors.telephone ? 'border-red-500' : 'border-black/30'} outline-none`}
+              placeholder="0123456789"
+              required
             />
+            {errors.telephone && <p className="text-red-500 text-sm mt-1">{errors.telephone}</p>}
           </div>
 
           {/* SPÉCIALITÉ */}
           <div className="w-full flex flex-col gap-1">
             <label htmlFor="specialite" className="text-black text-xl font-medium font-['Work_Sans']">
-              SPÉCIALITÉ
+              SPÉCIALITÉ <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -117,14 +177,16 @@ const NouvellePage = () => {
               id="specialite"
               value={formData.specialite}
               onChange={handleChange}
-              className="h-10 px-3 bg-neutral-200 rounded-[5px] border border-black/30 outline-none"
+              className={`h-10 px-3 bg-neutral-200 rounded-[5px] border ${errors.specialite ? 'border-red-500' : 'border-black/30'} outline-none`}
+              required
             />
+            {errors.specialite && <p className="text-red-500 text-sm mt-1">{errors.specialite}</p>}
           </div>
 
           {/* DATE DISPONIBLE */}
           <div className="w-full flex flex-col gap-1">
             <label htmlFor="date" className="text-black text-xl font-medium font-['Work_Sans']">
-              DATE DISPONIBLE
+              DATE DISPONIBLE <span className="text-red-500">*</span>
             </label>
             <input
               type="date"
@@ -132,14 +194,16 @@ const NouvellePage = () => {
               id="date"
               value={formData.date}
               onChange={handleChange}
-              className="h-10 px-3 bg-neutral-200 rounded-[5px] border border-black/30 outline-none"
+              className={`h-10 px-3 bg-neutral-200 rounded-[5px] border ${errors.date ? 'border-red-500' : 'border-black/30'} outline-none`}
+              required
             />
+            {errors.date && <p className="text-red-500 text-sm mt-1">{errors.date}</p>}
           </div>
 
           {/* BOUTON DE SOUMISSION */}
           <button
             type="submit"
-            className="p-2.5 bg-blue-500 rounded-3xl shadow-[0px_0px_4px_2px_rgba(0,0,0,0.25)] text-white text-3xl font-bold font-['Ubuntu'] w-96"
+            className="p-2.5 bg-blue-500 rounded-3xl shadow-[0px_0px_4px_2px_rgba(0,0,0,0.25)] text-white text-3xl font-bold font-['Ubuntu'] w-96 hover:bg-blue-600 transition-colors"
           >
             CONFIRMER
           </button>
