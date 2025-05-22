@@ -1,25 +1,24 @@
 {
-  "name": "hsv",
+  "name": "hsv-fusion",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "backend:dev": "cd back && npm run dev",
+    "backend:build": "cd back && npm run build",
+    "backend:start": "cd back && npm run start",
+    "install:backend": "cd back && npm install",
+    "frontend:dev": "cd front/hsv && npm run dev",
+    "frontend:build": "cd front/hsv && npm run build",
+    "frontend:start": "cd front/hsv && npm run start",
+    "install:frontend": "cd front/hsv && npm install",
+    "install:all": "npm run install:backend && npm run install:frontend",
+    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\""
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "mongodb": "^6.16.0"
-  },
   "description": "",
   "devDependencies": {
-    "@types/express": "^5.0.2",
-    "@types/node": "^22.15.19",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.8.3"
+    "concurrently": "^8.2.2"
   }
 }
