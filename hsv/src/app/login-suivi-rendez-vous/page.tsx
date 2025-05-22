@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-const SuiviRendezVous = () => {
+const LoginSuiviRendezVous = () => {
     const [nom, setNom] = useState('');
     const [email, setEmail] = useState('');
 
@@ -58,4 +58,4 @@ const SuiviRendezVous = () => {
     );
 }
 
-export default SuiviRendezVous;
+export default LoginSuiviRendezVous;
